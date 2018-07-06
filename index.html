@@ -1,0 +1,134 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jokeripokeri</title>
+    <link rel="stylesheet" href="cards.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+    <style type="text/css">
+      body {
+        font-family: 'Open Sans', sans-serif;
+        text-size-adjust: 100%;
+      }
+
+      h2, button { font-size: 16px; font-weight: bold; }
+
+      .card.mini { font-size: 10px; }
+      @media only screen and (max-width: 800px) {
+        .card.mini { font-size: 8px; }
+      }
+
+      .card.selected {
+        background-color: #ccf;
+        border-color: blue;
+      }
+
+      table {
+        border-collapse: collapse;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      tr.highlight {
+        border: 2px solid green;
+        background-color: #efe;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cards" class="cards"></div>
+
+    <p>Valitse ensin 5 korttia klikkaamalla.</p>
+
+    <h2><a name="optimal">Optimaalinen valinta:</a></h2>
+
+    <table id="ans">
+    </table>
+
+    <button id="reset">Aloita alusta</button>
+
+    <script src="jquery-3.3.1.slim.min.js"></script>
+
+    <script src="jokeripokeri.js"></script>
+
+    <script>
+      var selected = 0;
+
+      $(function() {
+        //var h = [0,1,2,3,4];
+        //var I=0, wins=0;
+        //var C = {0: 0, 2: 0, 3: 0, 4: 0, 8: 0, 15: 0, 30: 0, 50: 0};
+        //do { wins += win(h); I++; C[w]++; } while(next_combi(h, 5, 53-1));
+        //alert(I + ' with ' + wins);
+        //for(v in C) $('#cards').append('<p>' + v + ' x ' + C[v] + '</p>');
+
+        for(var s=0; s<4; s++) {
+          for(var v=0; v<13; v++) {
+            $('#cards').append(`<div class="card mini card-${suitNames[s]} card-${cardValues[v]}"></div>`);
+          }
+          if(s==3) $('#cards').append(`<div class="card mini card-X"></div>`); // joker
+          $('#cards').append('<br>');
+        }
+
+        $('#cards').click(function(e) {
+          var el = $(e.target).closest('.card');
+
+          if(!el.hasClass('card')) return;
+
+          if(el.hasClass('selected')) {
+            el.removeClass('selected');
+            selected--;
+          } else {
+            if(selected >= 5) return; // limit to 5
+            el.addClass('selected');
+            selected++;
+          }
+
+          if(selected == 5) {
+            var h = $('.cards .card.selected').map(function(i, el) {
+              var cls = $(el).attr('class').split(' ');
+              var v=-1, s=-1;
+              cls.forEach(function(c) {
+                if(!c.startsWith('card-')) return;
+                c = c.charAt(5);
+                v = Math.max(v, cardValues.indexOf(c));
+                s = Math.max(s, suitNames.indexOf(c));
+                });
+              if(v==-1) return 52;
+              return v*4 + s;
+            }).get();
+
+            h.sort(numcomp);
+
+            console.time('optimal_selection');
+            var o = optimal_selection(h);
+            console.timeEnd('optimal_selection');
+            o.sort(function(a, b) { return b.p - a.p }); // descending
+
+            $('#ans').empty();
+            for(var j=0; j<5; j++) { // top 5 choices
+              var cards = [`${j+1}.`];
+              for(var i=0; i<5; i++) {
+                var s = h[i]&3, v = h[i]>>2;
+                var sel = ((o[j].s>>i)&1) ? ' selected' : '';
+                if(h[i]!=52)
+                  cards.push(`<div class="card${sel} card-${suitNames[s]} card-${cardValues[v]}"></div>`);
+                else
+                  cards.push(`<div class="card${sel} card-X"></div>`); // joker
+              }
+              var high = j ? '' : ' class="highlight"'
+              cards.push('keskim. voitto ' + (Math.round(o[j].p * 1000) / 1000));
+              $('#ans').append(`<tr${high}><td>` + cards.join('</td><td>') + '</td></tr>');
+            }
+            $('#ans')[0].scrollIntoView();
+          }
+        });
+
+        $('#reset').click(function(e) {
+            $('.selected').removeClass('selected');
+            selected = 0;
+            $('#cards')[0].scrollIntoView();
+        });
+      });
+    </script>
+  </body>
+</html>
