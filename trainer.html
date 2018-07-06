@@ -12,20 +12,22 @@
 <div id="content">
   <div id="cards">
     <div id="message"></div>
-    <div id="card0" class="card back"></div>
-    <div id="card1" class="card back"></div>
-    <div id="card2" class="card back"></div>
-    <div id="card3" class="card back"></div>
-    <div id="card4" class="card back"></div>
+    <div id="card0" class="card card-back"></div>
+    <div id="card1" class="card card-back"></div>
+    <div id="card2" class="card card-back"></div>
+    <div id="card3" class="card card-back"></div>
+    <div id="card4" class="card card-back"></div>
   </div>
   <p class="hint">Valitse haluamasi kortit koskettamalla niit&auml; ruudulla ja paina <span class="jako">JAKO</span></p>
 
   <div class="modeline">
     <div class="infobox" id="games">PELIT <span class="amount">0</div>
     <div class="infobox" id="winnings">VOITOT <span class="amount">0.00</div>
-    <button class="bet">PANOS</button>
-    <button class="deal">JAKO</button>
+    <button class="deal">UUSI</button>
   </div>
+
+  <h2>Optimistrategia</h2>
+  <table id="ans"></table>
 </div>
 
 <script src="jquery-3.3.1.slim.min.js"></script>
@@ -46,7 +48,7 @@ function setCard(n, val) {
   $('#card'+n).removeClass(); // clear classes
   $('#card'+n).addClass('card');
   if(val == -1) {
-    $('#card'+n).addClass('back');
+    $('#card'+n).addClass('card-back');
   } else if(val == 52) {
     $('#card'+n).addClass('card-X');
   } else {
@@ -64,12 +66,33 @@ function newDeal() {
     setCard(i, h[i]);
 }
 
+function reportOptimal(o, h, usersel) {
+  $('#ans').empty();
+  for(var j=0; j<32; j++) {
+    if(j>=3 && o[j].s != usersel) continue; // top-3 and user selected shown
+
+    var cards = [`${j+1}.`];
+    for(var i=0; i<5; i++) {
+      var s = h[i]&3, v = h[i]>>2;
+      var sel = ((o[j].s>>i)&1) ? ' selected' : '';
+      if(h[i]!=52)
+        cards.push(`<div class="card${sel} card-${suitNames[s]} card-${cardValues[v]}"></div>`);
+      else
+        cards.push(`<div class="card${sel} card-X"></div>`); // joker
+    }
+    var high = '';
+    if(usersel == o[j].s) high = ' class="' + (j?'in':'') + 'correct"';
+
+    cards.push('keskim. voitto ' + (Math.round(o[j].p * 1000) / 1000));
+    $('#ans').append(`<tr${high}><td>` + cards.join('</td><td>') + '</td></tr>');
+  }
+}
+
 $(function() {
   var selected = 0;
 
-  updateWins();
-  newDeal();
-
+  //updateWins();
+  //newDeal();
   //$('.card-T').html('<div class="optimal"></div>');
 
   $('.card').click(function(e) {
@@ -99,15 +122,33 @@ $(function() {
         return;
       }
 
-      var h2 = [], n = 0;
+      var h2 = h.slice(0,5), n = 0, usersel = 0;
+      for(var i=0; i<5; i++)
+        if(!$('#card'+i).is(':empty')) usersel += 1 << i;
+
+      console.time('optimal_selection');
+      var o = optimal_selection(h2, false); // don't optimize
+      console.timeEnd('optimal_selection');
+      o.sort(function(a, b) { return b.p - a.p }); // descending
+
+      var avgwin = parseFloat(o.find(v => v.s == usersel).p).toFixed(3);
+
+      reportOptimal(o, h2, usersel);
 
       for(var i=0; i<5; i++) {
-        h2[i] = $('#card'+i).is(':empty') ?  h[5 + (n++)] : h[i];
+        h2[i] = (usersel & (1<<i)) ?  h[i] : h[5 + (n++)];
         setCard(i, h2[i]);
       }
       h2.sort(numcomp);
-      $('#message').html('<div class="message">Voitit ' + win(h2) + '</div>');
+
+      var w = win(h2);
+
+      if(w > 0)
+        $('#message').html(`<div class="message success">Voitit ${w}, keskimääräinen voitto ${avgwin}.</div>`);
+      else
+        $('#message').html(`<div class="message success">Ei voittoa, keskimääräinen voitto ${avgwin}.</div>`);
       $('.deal').html('UUSI');
+
 
       winnings += win(h2);
       games++;
@@ -116,6 +157,7 @@ $(function() {
       newDeal();
       selected = 0;
       $('#message').html('');
+      $('#ans').empty();
       $('.deal').html('JAKO');
     }
   });

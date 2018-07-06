@@ -11,6 +11,14 @@ body {
     text-size-adjust: 100%;
 }
 
+h1, h2 {
+    font-weight: bold;
+    font-style: italic;
+}
+
+h1 { font-size: 1.6em; }
+h2 { font-size: 1.2em; }
+
 #content {
     max-width: 1280px;
     margin: 0.5em auto;
@@ -37,13 +45,40 @@ body {
     margin-left: -250px;
     margin-top: -0.5em;
     text-align: center;
-    background-color: red;
     text-shadow: 1px 1px 1px #000;
     box-shadow: 1px 1px 1px #000;
     border-radius: 0.3em;
     font-weight: bold;
     font-size: 0.6em;
     font-style: italic;
+}
+
+.message.success { background-color: green; }
+.message.fail { background-color: red; }
+
+table {
+    border-collapse: collapse;
+}
+
+table#ans {
+    margin: 0 auto;
+}
+
+tr.correct {
+    border: 2px solid green;
+    background-color: rgba(0, 255, 0, 0.3);
+    /*background-color: #efe;*/
+}
+
+tr.incorrect {
+    border: 2px solid red;
+    background-color: rgba(255, 0, 0, 0.3);
+    /*background-color: #efe;*/
+}
+
+#ans .card.selected {
+    border: 2px solid green;
+    background-color: #cfc;
 }
 
 .card .optimal:after, .card .selected:after {

@@ -76,31 +76,27 @@ function ONE_BIT(v) {
   return !(v & (v-1))
 }
 
-function is_paired(h) {
-  for(var i = 0; i < 4; i++)
-    if((h[i] >> 2) == (h[i + 1] >> 2))
-      return true;
+// Modified to support unsorted hands
+function is_paired(a) {
+  var c = [];
+  for(var i = 0; i < a.length; i++)
+    if(c[a[i]>>2] === undefined) c[a[i]>>2] = 1; else return true;
   return false;
 }
 
-// Find optimal selection for a sorted hand
-function optimal_selection(h) {
-  var left = [];
-  var ans = [];
-  var c, hp;
+// Find optimal selection for a hand
+function optimal_selection(h, opti=true) {
+  var left = [], ans = [{p: 0, s: 0}]; // with this, index == selection
 
-  for(c=0, lp=0, hp=0; c<53; c++)
-    if(hp < 5 && h[hp] == c) hp++; else left.push(c);
+  for(var c=0; c<53; c++) if(!h.includes(c)) left.push(c);
 
   var paired = is_paired(h);
 
   var S, I, n, sel = [0,0,0,0,0], ci;
 
-  for(var s=1; s<32; s++) {
-    // no single selection optimums with a pair or better in hand
-    if(ONE_BIT(s) && paired) continue; 
-    // With joker, you have to select the joker, not toss it
-    if(h[4]==52 && s<16) continue;
+  // With joker, you have to select the joker, not toss it
+  for(var s = (opti && h.includes(52)) ? 16 : 1; s<32; s++) {
+    if(opti && ONE_BIT(s) && paired) continue; // no single beats a pair
 
     S = I = n = 0; ci = [0,1,2,3];
 
