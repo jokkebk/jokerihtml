@@ -1,6 +1,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
   <!-- <meta http-equiv="refresh" content="3" > -->
   <title>Jokeripokeri trainer</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
@@ -9,12 +10,19 @@
 </head>
 <body>
 <div id="content">
-  <div id="cards"></div>
+  <div id="cards">
+    <div id="message"></div>
+    <div id="card0" class="card back"></div>
+    <div id="card1" class="card back"></div>
+    <div id="card2" class="card back"></div>
+    <div id="card3" class="card back"></div>
+    <div id="card4" class="card back"></div>
+  </div>
   <p class="hint">Valitse haluamasi kortit koskettamalla niit&auml; ruudulla ja paina <span class="jako">JAKO</span></p>
 
   <div class="modeline">
-    <div class="winnings">VOITOT <span class="amount">0.00</div>
-    <div class="betsize">PANOS <span class="amount">0.00</div>
+    <div class="infobox" id="games">PELIT <span class="amount">0</div>
+    <div class="infobox" id="winnings">VOITOT <span class="amount">0.00</div>
     <button class="bet">PANOS</button>
     <button class="deal">JAKO</button>
   </div>
@@ -25,30 +33,44 @@
 <script src="jokeripokeri.js"></script>
 
 <script>
-var winnings = 5, betsize = 0.2;
+var games = 0, winnings = 0.0;
+var h = [];
 
 function updateWins() {
-  $('.winnings .amount').html(parseFloat(winnings).toFixed(2));
-  $('.betsize .amount').html(parseFloat(betsize).toFixed(2));
+  $('#games .amount').html(games);
+  $('#winnings .amount').html(parseFloat(winnings).toFixed(2));
+}
+
+function setCard(n, val) {
+  $('#card'+n).html(''); // clear selections
+  $('#card'+n).removeClass(); // clear classes
+  $('#card'+n).addClass('card');
+  if(val == -1) {
+    $('#card'+n).addClass('back');
+  } else if(val == 52) {
+    $('#card'+n).addClass('card-X');
+  } else {
+      $('#card'+n).addClass('card-' + 'HDSC'.charAt(val&3));
+      $('#card'+n).addClass('card-' + '23456789TJQKA'.charAt(val>>2));
+  }
+}
+
+function newDeal() {
+  h = [];
+  for(var i=0; i<53; i++) h.push(i);
+  shuffle(h);
+
+  for(var i=0; i<5; i++)
+    setCard(i, h[i]);
 }
 
 $(function() {
   var selected = 0;
 
   updateWins();
-  //dealCards();
+  newDeal();
 
-  var h = [5, 20, 35, 40, 52];
-  for(var i=0; i<5; i++) {
-    //h[i] = Math.floor(Math.random() * 53);
-    if(h[i] == 52)
-      $('#cards').append('<div class="card card-X"></div>');
-    else {
-      var suit = 'HDSC'.charAt(h[i]&3);
-      var value = '23456789TJQKA'.charAt(h[i]>>2);
-      $('#cards').append(`<div class="card card-${suit} card-${value}"></div>`);
-    }
-  }
+  //$('.card-T').html('<div class="optimal"></div>');
 
   $('.card').click(function(e) {
     var el = $(e.target).closest('.card');
@@ -61,6 +83,40 @@ $(function() {
     } else {
       el.empty();
       selected--;
+    }
+  });
+
+  $('.bet').click(function(e) {
+    betsize += 0.2;
+    if(betsize > 1) betsize = 0.2;
+    updateWins();
+  });
+
+  $('.deal').click(function(e) {
+    if($('.deal').html() == 'JAKO') {
+      if(!selected) {
+        alert('Valitse ainakin yksi kortti!');
+        return;
+      }
+
+      var h2 = [], n = 0;
+
+      for(var i=0; i<5; i++) {
+        h2[i] = $('#card'+i).is(':empty') ?  h[5 + (n++)] : h[i];
+        setCard(i, h2[i]);
+      }
+      h2.sort(numcomp);
+      $('#message').html('<div class="message">Voitit ' + win(h2) + '</div>');
+      $('.deal').html('UUSI');
+
+      winnings += win(h2);
+      games++;
+      updateWins();
+    } else {
+      newDeal();
+      selected = 0;
+      $('#message').html('');
+      $('.deal').html('JAKO');
     }
   });
 });
