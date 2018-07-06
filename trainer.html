@@ -15,7 +15,8 @@
   <div class="modeline">
     <div class="winnings">VOITOT <span class="amount">0.00</div>
     <div class="betsize">PANOS <span class="amount">0.00</div>
-    <div class="deal">JAKO</div>
+    <button class="bet">PANOS</button>
+    <button class="deal">JAKO</button>
   </div>
 </div>
 
@@ -37,9 +38,9 @@ $(function() {
   updateWins();
   //dealCards();
 
-  var h = [];
+  var h = [5, 20, 35, 40, 52];
   for(var i=0; i<5; i++) {
-    h[i] = Math.floor(Math.random() * 53);
+    //h[i] = Math.floor(Math.random() * 53);
     if(h[i] == 52)
       $('#cards').append('<div class="card card-X"></div>');
     else {
