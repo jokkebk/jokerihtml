@@ -1,160 +1,56 @@
-/* Cards CSS based on https://github.com/pakastin/deck-of-cards by Juha Lindstedt et.al. (MIT licence)
- * Face graphics by Chris Aguilar http://sourceforge.net/projects/vector-cards/ (LGPL) */
+* {
+    margin: 0;
+    padding: 0;
+}
 
 body {
-  background-color: #63A8BE;
-  color: #333;
-  text-align: center;
-  font-family: 'Open Sans', sans-serif;
-  text-size-adjust: 100%;
+    background-color: #63A8BE;
+    color: white;
+    text-align: center;
+    font-family: 'Robota', sans-serif;
+    text-size-adjust: 100%;
 }
 
 #content {
     max-width: 1280px;
-    margin: 0 auto;
+    margin: 0.5rem auto;
 }
 
-@media (min-width: 640px) {
-  html {
-    font-size: 125%;
-  }
+.card .selected:after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    width: 75%;
+    margin-left: -40%;
+    margin-top: -0.4rem;
+    text-align: center;
+    text-shadow: 1px 1px 1px #000;
+    box-shadow: 1px 1px 1px #000;
+    border-radius: 0.3rem;
+    content: "LUKITTU";
+    color: rgb(254, 221, 1);
+    font-weight: bold;
+    font-size: 0.55rem;
+    font-style: italic;
+    background-color: rgb(16, 172, 194);
+    border: 2px solid rgb(254, 221, 1);
 }
 
-@media (min-width: 1000px) {
-  html {
-    font-size: 200%;
-  }
+.hint {
+    font-weight: bold;
+    font-size: 0.6rem;
+    font-style: italic;
 }
 
-.card {
-  position: relative;
-  display: inline-block;
-  width: 3.875rem;
-  height: 5.5rem;
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+.hint .jako {
+    color: rgb(100, 255, 99);
+
 }
-
-.card:before,
-.card:after {
-  position: absolute;
-  font-size: 0.7rem;
-  text-align: center;
-  line-height: 0.7rem;
-  font-family: 'Ubuntu Condensed', sans-serif;
-  white-space: pre-line;
-  width: 0.55rem;
-  letter-spacing: -0.1rem;
+.modeline {
+    width: 70%;
+    margin: 0.5rem auto;
+    text-align: left;
+    font-size: 0.8em;
 }
-
-.card:before {
-  top: 0.10rem;
-  left: -0.05rem;
-}
-
-.card:after {
-  bottom: 0.1rem;
-  right: 0;
-  transform: rotate(180deg);
-}
-
-.card {
-  background-position: 50% 50%;
-  background-size: 98% 98%;
-  background-repeat: no-repeat;
-}
-
-.card-back { background-image: url("faces/back.png"); }
-
-.card-S, .card-C, .card-X2, .card-X3 { color: #000; }
-
-.card-H, .card-D, .card-X { color: #d40000; }
-
-.card-X:before,
-.card-X2:before,
-.card-X3:before,
-.card-X:after,
-.card-X2:after,
-.card-X3:after {
-  content: "J\a O\a K\a E\a R";
-  letter-spacing: 0;
-  font-size: 0.4rem;
-  line-height: 0.4rem;
-  padding: 0.15rem 0.05rem;
-  width: 0.5rem;
-}
-
-.card-A:before, .card-A:after { content: "A"; } 
-.card-2:before, .card-2:after { content: "2"; } 
-.card-3:before, .card-3:after { content: "3"; } 
-.card-4:before, .card-4:after { content: "4"; } 
-.card-5:before, .card-5:after { content: "5"; } 
-.card-6:before, .card-6:after { content: "6"; } 
-.card-7:before, .card-7:after { content: "7"; } 
-.card-8:before, .card-8:after { content: "8"; } 
-.card-9:before, .card-9:after { content: "9"; } 
-.card-T:before, .card-T:after { content: "10"; } 
-.card-J:before, .card-J:after { content: "J"; } 
-.card-Q:before, .card-Q:after { content: "Q"; } 
-.card-K:before, .card-K:after { content: "K"; } 
-
-.card-S.card-A  { background-image: url("faces/0_1.svg"); } 
-.card-S.card-2  { background-image: url("faces/0_2.svg"); } 
-.card-S.card-3  { background-image: url("faces/0_3.svg"); } 
-.card-S.card-4  { background-image: url("faces/0_4.svg"); } 
-.card-S.card-5  { background-image: url("faces/0_5.svg"); } 
-.card-S.card-6  { background-image: url("faces/0_6.svg"); } 
-.card-S.card-7  { background-image: url("faces/0_7.svg"); } 
-.card-S.card-8  { background-image: url("faces/0_8.svg"); } 
-.card-S.card-9  { background-image: url("faces/0_9.svg"); } 
-.card-S.card-T  { background-image: url("faces/0_10.svg"); } 
-.card-S.card-J  { background-image: url("faces/0_11.svg"); } 
-.card-S.card-Q  { background-image: url("faces/0_12.svg"); } 
-.card-S.card-K  { background-image: url("faces/0_13.svg"); } 
-
-.card-H.card-A  { background-image: url("faces/1_1.svg"); } 
-.card-H.card-2  { background-image: url("faces/1_2.svg"); } 
-.card-H.card-3  { background-image: url("faces/1_3.svg"); } 
-.card-H.card-4  { background-image: url("faces/1_4.svg"); } 
-.card-H.card-5  { background-image: url("faces/1_5.svg"); } 
-.card-H.card-6  { background-image: url("faces/1_6.svg"); } 
-.card-H.card-7  { background-image: url("faces/1_7.svg"); } 
-.card-H.card-8  { background-image: url("faces/1_8.svg"); } 
-.card-H.card-9  { background-image: url("faces/1_9.svg"); } 
-.card-H.card-T  { background-image: url("faces/1_10.svg"); } 
-.card-H.card-J  { background-image: url("faces/1_11.svg"); } 
-.card-H.card-Q  { background-image: url("faces/1_12.svg"); } 
-.card-H.card-K  { background-image: url("faces/1_13.svg"); } 
-
-.card-C.card-A  { background-image: url("faces/2_1.svg"); } 
-.card-C.card-2  { background-image: url("faces/2_2.svg"); } 
-.card-C.card-3  { background-image: url("faces/2_3.svg"); } 
-.card-C.card-4  { background-image: url("faces/2_4.svg"); } 
-.card-C.card-5  { background-image: url("faces/2_5.svg"); } 
-.card-C.card-6  { background-image: url("faces/2_6.svg"); } 
-.card-C.card-7  { background-image: url("faces/2_7.svg"); } 
-.card-C.card-8  { background-image: url("faces/2_8.svg"); } 
-.card-C.card-9  { background-image: url("faces/2_9.svg"); } 
-.card-C.card-T  { background-image: url("faces/2_10.svg"); } 
-.card-C.card-J  { background-image: url("faces/2_11.svg"); } 
-.card-C.card-Q  { background-image: url("faces/2_12.svg"); } 
-.card-C.card-K  { background-image: url("faces/2_13.svg"); } 
-
-.card-D.card-A  { background-image: url("faces/3_1.svg"); } 
-.card-D.card-2  { background-image: url("faces/3_2.svg"); } 
-.card-D.card-3  { background-image: url("faces/3_3.svg"); } 
-.card-D.card-4  { background-image: url("faces/3_4.svg"); } 
-.card-D.card-5  { background-image: url("faces/3_5.svg"); } 
-.card-D.card-6  { background-image: url("faces/3_6.svg"); } 
-.card-D.card-7  { background-image: url("faces/3_7.svg"); } 
-.card-D.card-8  { background-image: url("faces/3_8.svg"); } 
-.card-D.card-9  { background-image: url("faces/3_9.svg"); } 
-.card-D.card-T  { background-image: url("faces/3_10.svg"); } 
-.card-D.card-J  { background-image: url("faces/3_11.svg"); } 
-.card-D.card-Q  { background-image: url("faces/3_12.svg"); } 
-.card-D.card-K  { background-image: url("faces/3_13.svg"); } 
-
-.card-X  { background-image: url("faces/4_1.svg"); } 
-.card-X2  { background-image: url("faces/4_2.svg"); } 
-.card-X3  { background-image: url("faces/4_3.svg"); } 
