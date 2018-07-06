@@ -77,8 +77,10 @@ tr.incorrect {
 }
 
 #ans .card.selected {
-    border: 2px solid green;
-    background-color: #cfc;
+    border: 2px solid black;
+}
+#ans .card.unselected {
+    background-color: #ccc;
 }
 
 .card .optimal:after, .card .selected:after {
@@ -124,9 +126,7 @@ tr.incorrect {
 }
 
 .modeline {
-    width: 60%;
     margin: 0.5em auto;
-    text-align: left;
 }
 
 .infobox, .bet, .deal {
@@ -145,7 +145,7 @@ tr.incorrect {
 }
 
 .infobox .amount {
-    margin-left: 0.5em;
+    margin-left: 0.4em;
     color: rgb(254, 221, 1);
     text-shadow: 1px 1px 1px #000;
 }

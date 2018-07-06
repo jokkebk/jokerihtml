@@ -21,12 +21,17 @@
   <p class="hint">Valitse haluamasi kortit koskettamalla niit&auml; ruudulla ja paina <span class="jako">JAKO</span></p>
 
   <div class="modeline">
-    <div class="infobox" id="games">PELIT <span class="amount">0</div>
-    <div class="infobox" id="winnings">VOITOT <span class="amount">0.00</div>
+    <div class="infobox" id="games">PELIT <span class="amount">0</span></div>
+    <div class="infobox" id="winnings">VOITOT <span class="amount">0.00</span></div>
+    <div class="infobox" id="avg_wins">KESKIM. <span class="amount">0.00</span></div>
     <button class="deal">UUSI</button>
   </div>
 
   <h2>Optimistrategia</h2>
+  <div class="modeline">
+    <div class="infobox" id="opti_winnings">VOITOT <span class="amount">0.00</span></div>
+    <div class="infobox" id="opti_wins">KESKIM. <span class="amount">0.00</span></div>
+  </div>
   <table id="ans"></table>
 </div>
 
@@ -35,12 +40,18 @@
 <script src="jokeripokeri.js"></script>
 
 <script>
-var games = 0, winnings = 0.0;
+var games = 0, winnings = 0.0, opti_winnings = 0.0;
+var avg_wins = 0.0, opti_wins = 0.0;
 var h = [];
 
 function updateWins() {
   $('#games .amount').html(games);
+
   $('#winnings .amount').html(parseFloat(winnings).toFixed(2));
+  $('#opti_winnings .amount').html(parseFloat(opti_winnings).toFixed(2));
+
+  $('#avg_wins .amount').html(parseFloat(avg_wins / games).toFixed(2));
+  $('#opti_wins .amount').html(parseFloat(opti_wins / games).toFixed(2));
 }
 
 function setCard(n, val) {
@@ -74,17 +85,18 @@ function reportOptimal(o, h, usersel) {
     var cards = [`${j+1}.`];
     for(var i=0; i<5; i++) {
       var s = h[i]&3, v = h[i]>>2;
-      var sel = ((o[j].s>>i)&1) ? ' selected' : '';
+      var un = ((o[j].s>>i)&1) ? '' : 'un';
       if(h[i]!=52)
-        cards.push(`<div class="card${sel} card-${suitNames[s]} card-${cardValues[v]}"></div>`);
+        cards.push(`<div class="card ${un}selected card-${suitNames[s]} card-${cardValues[v]}"></div>`);
       else
-        cards.push(`<div class="card${sel} card-X"></div>`); // joker
+        cards.push(`<div class="card ${un}selected card-X"></div>`); // joker
     }
-    var high = '';
-    if(usersel == o[j].s) high = ' class="' + (j?'in':'') + 'correct"';
+    var hi = '';
+    if(usersel == o[j].s)
+      hi = ' class="' + (o[j].p == o[0].p ? 'correct' : 'incorrect') + '"';
 
     cards.push('keskim. voitto ' + (Math.round(o[j].p * 1000) / 1000));
-    $('#ans').append(`<tr${high}><td>` + cards.join('</td><td>') + '</td></tr>');
+    $('#ans').append(`<tr${hi}><td>` + cards.join('</td><td>') + '</td></tr>');
   }
 }
 
@@ -131,7 +143,13 @@ $(function() {
       console.timeEnd('optimal_selection');
       o.sort(function(a, b) { return b.p - a.p }); // descending
 
-      var avgwin = parseFloat(o.find(v => v.s == usersel).p).toFixed(3);
+      opti_wins += o[0].p; // Tally wins for optimum strategy
+
+      var avgwin = o.find(v => v.s == usersel).p;
+
+      avg_wins += avgwin; // Tally average wins for us
+
+      avgwin = parseFloat(avgwin).toFixed(3); // pretty print
 
       reportOptimal(o, h2, usersel);
 
@@ -143,14 +161,24 @@ $(function() {
 
       var w = win(h2);
 
+      winnings += w;
+
+      n = 0;
+      for(var i=0; i<5; i++) // Once more for optimal strategy
+        h2[i] = (o[0].s & (1<<i)) ?  h[i] : h[5 + (n++)];
+      h2.sort(numcomp);
+
+      var opti_w = win(h2);
+
+      opti_winnings += opti_w;
+
       if(w > 0)
-        $('#message').html(`<div class="message success">Voitit ${w}, keskimääräinen voitto ${avgwin}.</div>`);
+        $('#message').html(`<div class="message success">Voitit ${w} (optimi ${opti_w}), keskimääräinen voitto ${avgwin}.</div>`);
       else
-        $('#message').html(`<div class="message success">Ei voittoa, keskimääräinen voitto ${avgwin}.</div>`);
+        $('#message').html(`<div class="message success">Ei voittoa (optimi ${opti_w}), keskimääräinen voitto ${avgwin}.</div>`);
       $('.deal').html('UUSI');
 
 
-      winnings += win(h2);
       games++;
       updateWins();
     } else {
