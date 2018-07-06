@@ -49,8 +49,8 @@ body {
 }
 
 .card:before {
-  top: 0.15rem;
-  left: 0;
+  top: 0.10rem;
+  left: -0.05rem;
 }
 
 .card:after {
@@ -59,35 +59,24 @@ body {
   transform: rotate(180deg);
 }
 
-.card .face, .card .back {
-  height: 100%;
+.card {
   background-position: 50% 50%;
-  background-size: 100% 100%;
+  background-size: 98% 98%;
   background-repeat: no-repeat;
 }
 
-.card .back {
-  background-image: url("faces/back.png");
-}
+.card-back { background-image: url("faces/back.png"); }
 
-.card.spades,
-.card.clubs,
-.card.joker {
-  color: #000;
-}
+.card-S, .card-C, .card-X2, .card-X3 { color: #000; }
 
-.card.hearts,
-.card.diamonds,
-.card.joker.rank3 {
-  color: #d40000;
-}
+.card-H, .card-D, .card-X { color: #d40000; }
 
-.card.joker.rank1:before,
-.card.joker.rank2:before,
-.card.joker.rank3:before,
-.card.joker.rank1:after,
-.card.joker.rank2:after,
-.card.joker.rank3:after {
+.card-X:before,
+.card-X2:before,
+.card-X3:before,
+.card-X:after,
+.card-X2:after,
+.card-X3:after {
   content: "J\a O\a K\a E\a R";
   letter-spacing: 0;
   font-size: 0.4rem;
@@ -96,71 +85,76 @@ body {
   width: 0.5rem;
 }
 
-.card.rank1:before, .card.rank1:after { content: "A"; } 
-.card.rank2:before, .card.rank2:after { content: "2"; } 
-.card.rank3:before, .card.rank3:after { content: "3"; } 
-.card.rank4:before, .card.rank4:after { content: "4"; } 
-.card.rank5:before, .card.rank5:after { content: "5"; } 
-.card.rank6:before, .card.rank6:after { content: "6"; } 
-.card.rank7:before, .card.rank7:after { content: "7"; } 
-.card.rank8:before, .card.rank8:after { content: "8"; } 
-.card.rank9:before, .card.rank9:after { content: "9"; } 
-.card.rank10:before, .card.rank10:after { content: "10"; } 
-.card.rank11:before, .card.rank11:after { content: "J"; } 
-.card.rank12:before, .card.rank12:after { content: "Q"; } 
-.card.rank13:before, .card.rank13:after { content: "K"; } 
-.card.spades.rank1 .face { background-image: url("faces/0_1.svg"); } 
-.card.spades.rank2 .face { background-image: url("faces/0_2.svg"); } 
-.card.spades.rank3 .face { background-image: url("faces/0_3.svg"); } 
-.card.spades.rank4 .face { background-image: url("faces/0_4.svg"); } 
-.card.spades.rank5 .face { background-image: url("faces/0_5.svg"); } 
-.card.spades.rank6 .face { background-image: url("faces/0_6.svg"); } 
-.card.spades.rank7 .face { background-image: url("faces/0_7.svg"); } 
-.card.spades.rank8 .face { background-image: url("faces/0_8.svg"); } 
-.card.spades.rank9 .face { background-image: url("faces/0_9.svg"); } 
-.card.spades.rank10 .face { background-image: url("faces/0_10.svg"); } 
-.card.spades.rank11 .face { background-image: url("faces/0_11.svg"); } 
-.card.spades.rank12 .face { background-image: url("faces/0_12.svg"); } 
-.card.spades.rank13 .face { background-image: url("faces/0_13.svg"); } 
-.card.hearts.rank1 .face { background-image: url("faces/1_1.svg"); } 
-.card.hearts.rank2 .face { background-image: url("faces/1_2.svg"); } 
-.card.hearts.rank3 .face { background-image: url("faces/1_3.svg"); } 
-.card.hearts.rank4 .face { background-image: url("faces/1_4.svg"); } 
-.card.hearts.rank5 .face { background-image: url("faces/1_5.svg"); } 
-.card.hearts.rank6 .face { background-image: url("faces/1_6.svg"); } 
-.card.hearts.rank7 .face { background-image: url("faces/1_7.svg"); } 
-.card.hearts.rank8 .face { background-image: url("faces/1_8.svg"); } 
-.card.hearts.rank9 .face { background-image: url("faces/1_9.svg"); } 
-.card.hearts.rank10 .face { background-image: url("faces/1_10.svg"); } 
-.card.hearts.rank11 .face { background-image: url("faces/1_11.svg"); } 
-.card.hearts.rank12 .face { background-image: url("faces/1_12.svg"); } 
-.card.hearts.rank13 .face { background-image: url("faces/1_13.svg"); } 
-.card.clubs.rank1 .face { background-image: url("faces/2_1.svg"); } 
-.card.clubs.rank2 .face { background-image: url("faces/2_2.svg"); } 
-.card.clubs.rank3 .face { background-image: url("faces/2_3.svg"); } 
-.card.clubs.rank4 .face { background-image: url("faces/2_4.svg"); } 
-.card.clubs.rank5 .face { background-image: url("faces/2_5.svg"); } 
-.card.clubs.rank6 .face { background-image: url("faces/2_6.svg"); } 
-.card.clubs.rank7 .face { background-image: url("faces/2_7.svg"); } 
-.card.clubs.rank8 .face { background-image: url("faces/2_8.svg"); } 
-.card.clubs.rank9 .face { background-image: url("faces/2_9.svg"); } 
-.card.clubs.rank10 .face { background-image: url("faces/2_10.svg"); } 
-.card.clubs.rank11 .face { background-image: url("faces/2_11.svg"); } 
-.card.clubs.rank12 .face { background-image: url("faces/2_12.svg"); } 
-.card.clubs.rank13 .face { background-image: url("faces/2_13.svg"); } 
-.card.diamonds.rank1 .face { background-image: url("faces/3_1.svg"); } 
-.card.diamonds.rank2 .face { background-image: url("faces/3_2.svg"); } 
-.card.diamonds.rank3 .face { background-image: url("faces/3_3.svg"); } 
-.card.diamonds.rank4 .face { background-image: url("faces/3_4.svg"); } 
-.card.diamonds.rank5 .face { background-image: url("faces/3_5.svg"); } 
-.card.diamonds.rank6 .face { background-image: url("faces/3_6.svg"); } 
-.card.diamonds.rank7 .face { background-image: url("faces/3_7.svg"); } 
-.card.diamonds.rank8 .face { background-image: url("faces/3_8.svg"); } 
-.card.diamonds.rank9 .face { background-image: url("faces/3_9.svg"); } 
-.card.diamonds.rank10 .face { background-image: url("faces/3_10.svg"); } 
-.card.diamonds.rank11 .face { background-image: url("faces/3_11.svg"); } 
-.card.diamonds.rank12 .face { background-image: url("faces/3_12.svg"); } 
-.card.diamonds.rank13 .face { background-image: url("faces/3_13.svg"); } 
-.card.joker.rank1 .face { background-image: url("faces/4_1.svg"); } 
-.card.joker.rank2 .face { background-image: url("faces/4_2.svg"); } 
-.card.joker.rank3 .face { background-image: url("faces/4_3.svg"); } 
+.card-A:before, .card-A:after { content: "A"; } 
+.card-2:before, .card-2:after { content: "2"; } 
+.card-3:before, .card-3:after { content: "3"; } 
+.card-4:before, .card-4:after { content: "4"; } 
+.card-5:before, .card-5:after { content: "5"; } 
+.card-6:before, .card-6:after { content: "6"; } 
+.card-7:before, .card-7:after { content: "7"; } 
+.card-8:before, .card-8:after { content: "8"; } 
+.card-9:before, .card-9:after { content: "9"; } 
+.card-T:before, .card-T:after { content: "10"; } 
+.card-J:before, .card-J:after { content: "J"; } 
+.card-Q:before, .card-Q:after { content: "Q"; } 
+.card-K:before, .card-K:after { content: "K"; } 
+
+.card-S.card-A  { background-image: url("faces/0_1.svg"); } 
+.card-S.card-2  { background-image: url("faces/0_2.svg"); } 
+.card-S.card-3  { background-image: url("faces/0_3.svg"); } 
+.card-S.card-4  { background-image: url("faces/0_4.svg"); } 
+.card-S.card-5  { background-image: url("faces/0_5.svg"); } 
+.card-S.card-6  { background-image: url("faces/0_6.svg"); } 
+.card-S.card-7  { background-image: url("faces/0_7.svg"); } 
+.card-S.card-8  { background-image: url("faces/0_8.svg"); } 
+.card-S.card-9  { background-image: url("faces/0_9.svg"); } 
+.card-S.card-T  { background-image: url("faces/0_10.svg"); } 
+.card-S.card-J  { background-image: url("faces/0_11.svg"); } 
+.card-S.card-Q  { background-image: url("faces/0_12.svg"); } 
+.card-S.card-K  { background-image: url("faces/0_13.svg"); } 
+
+.card-H.card-A  { background-image: url("faces/1_1.svg"); } 
+.card-H.card-2  { background-image: url("faces/1_2.svg"); } 
+.card-H.card-3  { background-image: url("faces/1_3.svg"); } 
+.card-H.card-4  { background-image: url("faces/1_4.svg"); } 
+.card-H.card-5  { background-image: url("faces/1_5.svg"); } 
+.card-H.card-6  { background-image: url("faces/1_6.svg"); } 
+.card-H.card-7  { background-image: url("faces/1_7.svg"); } 
+.card-H.card-8  { background-image: url("faces/1_8.svg"); } 
+.card-H.card-9  { background-image: url("faces/1_9.svg"); } 
+.card-H.card-T  { background-image: url("faces/1_10.svg"); } 
+.card-H.card-J  { background-image: url("faces/1_11.svg"); } 
+.card-H.card-Q  { background-image: url("faces/1_12.svg"); } 
+.card-H.card-K  { background-image: url("faces/1_13.svg"); } 
+
+.card-C.card-A  { background-image: url("faces/2_1.svg"); } 
+.card-C.card-2  { background-image: url("faces/2_2.svg"); } 
+.card-C.card-3  { background-image: url("faces/2_3.svg"); } 
+.card-C.card-4  { background-image: url("faces/2_4.svg"); } 
+.card-C.card-5  { background-image: url("faces/2_5.svg"); } 
+.card-C.card-6  { background-image: url("faces/2_6.svg"); } 
+.card-C.card-7  { background-image: url("faces/2_7.svg"); } 
+.card-C.card-8  { background-image: url("faces/2_8.svg"); } 
+.card-C.card-9  { background-image: url("faces/2_9.svg"); } 
+.card-C.card-T  { background-image: url("faces/2_10.svg"); } 
+.card-C.card-J  { background-image: url("faces/2_11.svg"); } 
+.card-C.card-Q  { background-image: url("faces/2_12.svg"); } 
+.card-C.card-K  { background-image: url("faces/2_13.svg"); } 
+
+.card-D.card-A  { background-image: url("faces/3_1.svg"); } 
+.card-D.card-2  { background-image: url("faces/3_2.svg"); } 
+.card-D.card-3  { background-image: url("faces/3_3.svg"); } 
+.card-D.card-4  { background-image: url("faces/3_4.svg"); } 
+.card-D.card-5  { background-image: url("faces/3_5.svg"); } 
+.card-D.card-6  { background-image: url("faces/3_6.svg"); } 
+.card-D.card-7  { background-image: url("faces/3_7.svg"); } 
+.card-D.card-8  { background-image: url("faces/3_8.svg"); } 
+.card-D.card-9  { background-image: url("faces/3_9.svg"); } 
+.card-D.card-T  { background-image: url("faces/3_10.svg"); } 
+.card-D.card-J  { background-image: url("faces/3_11.svg"); } 
+.card-D.card-Q  { background-image: url("faces/3_12.svg"); } 
+.card-D.card-K  { background-image: url("faces/3_13.svg"); } 
+
+.card-X  { background-image: url("faces/4_1.svg"); } 
+.card-X2  { background-image: url("faces/4_2.svg"); } 
+.card-X3  { background-image: url("faces/4_3.svg"); } 
