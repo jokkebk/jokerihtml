@@ -1,6 +1,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <meta http-equiv="refresh" content="3" > -->
   <title>Jokeripokeri trainer</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
   <link rel="stylesheet" href="cards-nice.css">
@@ -8,15 +9,13 @@
 </head>
 <body>
 <div id="content">
-  <div class="card card-X"></div>
-  <div class="card card-C card-T"><div class="selected"></div></div>
-  <div class="card card-S card-J"></div>
-  <div class="card card-H card-Q"></div>
-  <div class="card card-H card-K"></div>
+  <div id="cards"></div>
   <p class="hint">Valitse haluamasi kortit koskettamalla niit&auml; ruudulla ja paina <span class="jako">JAKO</span></p>
 
   <div class="modeline">
-    <div class="winnings">VOITOT <span class="amount">8.00</div>
+    <div class="winnings">VOITOT <span class="amount">0.00</div>
+    <div class="betsize">PANOS <span class="amount">0.00</div>
+    <div class="deal">JAKO</div>
   </div>
 </div>
 
@@ -25,8 +24,31 @@
 <script src="jokeripokeri.js"></script>
 
 <script>
+var winnings = 5, betsize = 0.2;
+
+function updateWins() {
+  $('.winnings .amount').html(parseFloat(winnings).toFixed(2));
+  $('.betsize .amount').html(parseFloat(betsize).toFixed(2));
+}
+
 $(function() {
   var selected = 0;
+
+  updateWins();
+  //dealCards();
+
+  var h = [];
+  for(var i=0; i<5; i++) {
+    h[i] = Math.floor(Math.random() * 53);
+    if(h[i] == 52)
+      $('#cards').append('<div class="card card-X"></div>');
+    else {
+      var suit = 'HDSC'.charAt(h[i]&3);
+      var value = '23456789TJQKA'.charAt(h[i]>>2);
+      $('#cards').append(`<div class="card card-${suit} card-${value}"></div>`);
+    }
+  }
+
   $('.card').click(function(e) {
     var el = $(e.target).closest('.card');
 
