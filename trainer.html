@@ -38,6 +38,7 @@
 <script src="jquery-3.3.1.slim.min.js"></script>
 
 <script src="jokeripokeri.js"></script>
+<script src="fastany.js"></script> <!-- emscripten -->
 
 <script>
 var games = 0, winnings = 0.0, opti_winnings = 0.0;
@@ -63,7 +64,7 @@ function setCard(n, val) {
   } else if(val == 52) {
     $('#card'+n).addClass('card-X');
   } else {
-      $('#card'+n).addClass('card-' + 'HDSC'.charAt(val&3));
+      $('#card'+n).addClass('card-' + 'HSDC'.charAt(val&3));
       $('#card'+n).addClass('card-' + '23456789TJQKA'.charAt(val>>2));
   }
 }
@@ -99,6 +100,24 @@ function reportOptimal(o, h, usersel) {
     $('#ans').append(`<tr${hi}><td>` + cards.join('</td><td>') + '</td></tr>');
   }
 }
+// Find optimal selection for a hand
+function optimal_selection2(h) {
+  var ans = [{p: 0, s: 0}]; // with this, index == selection
+  var hord = h.map(function(v, i) { return v*8 + i; }).sort(numcomp);
+
+  for(var s = 1; s<32; s++) {
+    var p = Module.average_win(hord[0]/8, hord[1]/8, hord[2]/8, hord[3]/8, hord[4]/8, s);
+    var sel = 0;
+
+    // return selection to positions in original hand
+    for(var i=0; i<5; i++) if((s>>i)&1) sel |= (1 << (hord[i]&7));
+
+    ans.push({p: p, s: sel});
+  }
+
+  return ans.sort(function(a, b) { return a.s - b.s });
+}
+
 
 $(function() {
   var selected = 0;
@@ -131,12 +150,20 @@ $(function() {
       }
 
       var h2 = h.slice(0,5), n = 0, usersel = 0;
+
       for(var i=0; i<5; i++)
         if(!$('#card'+i).is(':empty')) usersel += 1 << i;
 
-      console.time('optimal_selection');
-      var o = optimal_selection(h2, false); // don't optimize
-      console.timeEnd('optimal_selection');
+      //var t0 = performance.now();
+      //var o = optimal_selection(h2, false); // don't optimize
+      //var t1 = performance.now();
+      //console.log('optimal_selection took ' + (t1-t0) + ' ms');
+
+      var t0 = performance.now();
+      var o = optimal_selection2(h2);
+      var t1 = performance.now();
+      console.log('optimal_selection2 took ' + (t1-t0) + ' ms');
+
       o.sort(function(a, b) { return b.p - a.p }); // descending
 
       opti_wins += o[0].p; // Tally wins for optimum strategy
