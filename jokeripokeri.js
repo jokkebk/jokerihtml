@@ -95,7 +95,7 @@ function optimal_selection(h, opti=true) {
   var S, I, n, sel = [0,0,0,0,0], ci;
 
   // With joker, you have to select the joker, not toss it
-  for(var s = (opti && h.includes(52)) ? 16 : 1; s<32; s++) {
+  for(var s = (opti && h[4] == 52) ? 16 : 1; s<32; s++) {
     if(opti && ONE_BIT(s) && paired) continue; // no single beats a pair
 
     S = I = n = 0; ci = [0,1,2,3];
